@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'gentelella.app.apps.AppConfig'
     'Inversiones_peniche.apps.InversionesPenicheConfig',
+    'gentelella.app.apps.AppConfig'
+
 ]
 
 MIDDLEWARE = [
