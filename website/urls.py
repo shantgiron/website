@@ -19,5 +19,4 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^inv/', include('Inversiones_peniche.urls')),
-    url(r'^app/', include('gentelella.app.urls')),
 ]

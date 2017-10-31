@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Inversiones_peniche.apps.InversionesPenicheConfig',
-    'gentelella.app.apps.AppConfig'
 
 ]
 
