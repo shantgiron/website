@@ -1,0 +1,88 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Login {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+          <form>
+
+            <h1>Iniciar Sesion</h1>
+            <div>
+              <input type="text" class="form-control" placeholder="Usuario" required="" />
+            </div>
+            <div>
+              <input type="password" class="form-control" placeholder="Contrasena" required="" />
+            </div>
+            <div>
+              <a class="btn btn-default submit" href="index.html">Iniciar Sesion</a>
+              <a class="reset_pass" href="#">Olvido su contrasena?</a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              <p class="change_link">Nuevo en el sitio?
+                <a href="#signup" class="to_register"> Crear cuenta </a>
+              </p>
+
+              <div class="clearfix"></div>
+              <br />
+
+
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div id="register" class="animate form registration_form">
+        <section class="login_content">
+          <form>
+            <h1>Crear cuenta</h1>
+             <div>
+              <input type="text" class="form-control" placeholder="Contrasena de administrador" required="" />
+            </div>
+            <div>
+              <input type="text" class="form-control" placeholder="Nombre de usuario" required="" />
+            </div>
+            <div>
+              <input type="email" class="form-control" placeholder="Email" required="" />
+            </div>
+            <div>
+              <input type="password" class="form-control" placeholder="Contrasena de usuario" required="" />
+            </div>
+            <div>
+              <a class="btn btn-default submit" href="index.html">Aceptar</a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              <p class="change_link">Eres Usuario?
+                <a href="#signin" class="to_register"> Iniciar sesion</a>
+              </p>
+
+              <div class="clearfix"></div>
+              <br />
+
+
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
