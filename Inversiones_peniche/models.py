@@ -2,6 +2,7 @@ from django.db import models
 import datetime
 from django.db import models
 from django.utils import timezone
+from django.shortcuts import reverse
 # Create your models here.
 
 
@@ -12,12 +13,12 @@ class Telefono(models.Model):
 
 class Persona(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
-    apellido = models.CharField(max_length=100)
-    fecha_nacimiento = models.DateField
-    cedula = models.CharField
-    correo = models.CharField
-    direccion = models.CharField
-    Telefonos = models.ForeignKey(Telefono, on_delete=models.CASCADE)
+    apellido = models.CharField(max_length=100, blank=True)
+    fecha_nacimiento = models.DateTimeField(default=timezone.now())
+    cedula = models.CharField(max_length=20, blank=True)
+    correo = models.CharField(max_length=35, blank=True)
+    direccion = models.CharField(max_length=50, blank=True)
+    Telefonos = models.ForeignKey(Telefono, on_delete=models.CASCADE, default="123")
 
 
 class Tipo(models.Model):
@@ -69,6 +70,9 @@ class Prestamo(models.Model):
 class Cliente(Persona):
         vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
         prestamo = models.ForeignKey(Prestamo, on_delete=models.CASCADE)
+
+        def get_absolute_url(self):
+            return reverse('base_site', kwargs={'pk': self.pk})
 
 
 class Factura (models.Model):
