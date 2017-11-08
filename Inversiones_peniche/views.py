@@ -6,6 +6,9 @@ from django.urls import reverse_lazy
 from .models import Cliente, Persona
 from .forms import PersonaForm
 
+from Inversiones_peniche.models import Vehiculo
+from Inversiones_peniche.forms import VehiculoForm
+
 
 # Create your views here.
 def index(request):
@@ -39,3 +42,26 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Cliente
     #success_url = reverse_lazy('cliente-list')
+
+
+def registro_vehiculo(request):
+    if request.method == 'POST':
+
+        form = VehiculoForm(request.POST)
+        if form.is_valid():
+            matricula = request.POST.get('matricula', '')
+            modelo = request.POST.get('modelo', '')
+            color = request.POST.get('color', '')
+            condicion = request.POST.get('condicion', '')
+            valor_mercado = request.POST.get('valor_mercado', '')
+            vehiculo_obj = Vehiculo(matricula=matricula, modelo=modelo, color=color, condicion=condicion,
+                                    valor_mercado=valor_mercado)
+            vehiculo_obj.save()
+
+            # return HttpResponseRedirect(reverse('inversiones_peniche:'))
+    else:
+        form = VehiculoForm()
+
+    return render(request, 'inversiones_peniche/form_vehiculo.html', {
+        'form': form,
+    })
