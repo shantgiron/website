@@ -1,35 +1,63 @@
 from django import forms
+from django.core import validators
+from django.core.validators import RegexValidator
+from django.forms import ModelForm, TextInput, EmailInput, DateInput
+import datetime
+from django.utils import timezone
+from .models import Cliente
+
 
 class VehiculoForm(forms.Form):
-    matricula = forms.CharField(unique=True, max_length=40)
+    matricula = forms.CharField(max_length=40)
     modelo = forms.CharField
     # tipo = forms.ForeignKey(Tipo, on_delete=forms.CASCADE)
     color = forms.CharField
     condicion = forms.CharField
     valor_mercado = forms.IntegerField
-from django.forms import ModelForm, TextInput, DateTimeInput
-from django.core.exceptions import NON_FIELD_ERRORS
-from .models import Persona
 
-class PersonaForm(ModelForm):
+
+class ClienteForm(ModelForm):
+    cedula = forms.CharField(validators=[
+        RegexValidator(regex=r'\d{11}', code='invalid_cedula', message='La cédula debe contener solo 11 dígitos')],
+        max_length=20,
+        widget=TextInput(attrs={'class': 'form-control has-feedback-left', 'placeholder': 'Cedula de Identidad'}))
+
     class Meta:
-        model = Persona
-        fields = ['nombre', 'apellido', 'cedula', 'correo', 'direccion', 'fecha_nacimiento']
+        model = Cliente
+        fields = '__all__'
+
         widgets = {
-            'nombre': TextInput(attrs={'class': 'form-control has-feedback-left', 'placeholder': 'Nombre'}),
+            'nombre': TextInput(attrs={'class': 'form-control has-feedback-left', 'placeholder': 'Nombre', 'aria-describedby':"helpBlock", 'required':''}),
             'apellido': TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellido'}),
-            'cedula': TextInput(attrs={'class': 'form-control has-feedback-left', 'placeholder': 'Cedula de Identidad'}),
-            'correo': TextInput(attrs={'class': 'form-control has-feedback-left', 'placeholder': 'Correo'}),
-            'fecha_nacimiento': DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'Fecha de nacimiento'}),
+            'correo': EmailInput(attrs={'class': 'form-control has-feedback-left', 'placeholder': 'Correo'}),
+            'fecha_nacimiento': DateInput(attrs={'class': 'form-control','onblur':"(this.type='text')",
+                                                                        'onfocus':"(this.type='date')",
+                                                                        'placeholder': 'Fecha de Nacimiento'}),
+
             'direccion': TextInput(attrs={'class': 'form-control', 'placeholder': 'Direccion'}),
+            'numero_cel': TextInput(attrs={'type': 'tel', 'class': 'form-control has-feedback-left', 'data-inputmask':"'mask': '(999) 999-9999', 'removeMaskOnSubmit': true ",
+                                           'placeholder': 'Celular'}),
+            'numero_telefono': TextInput(attrs={'class': 'form-control',
+                                                'data-inputmask':"'mask': '(999) 999-9999', 'removeMaskOnSubmit': true ",'placeholder': 'Telefono'}),
+            'vehiculo': TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
         }
 
         help_texts = {
-            'name': ('Escriba el nombre de la persoja e.g Leonardo'),
+            'nombre': 'Escriba el nombre de la persona e.g Leonardo',
         }
         error_messages = {
-            'name': {
-                'max_length': ("This writer's name is too long."),
+            'nombre': {
+                'max_length': "Este nombre es muy largo",
+
             },
+
         }
+
+
+
+    def clean_fecha_nacimiento(self):
+        fecha = self.cleaned_data['fecha_nacimiento']
+        if fecha > timezone.now():
+            raise validators.ValidationError(message='Fecha incorrecta: no puede ser una fecha futura')
+        return fecha
 

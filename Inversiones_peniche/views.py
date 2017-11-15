@@ -3,9 +3,8 @@ from django.shortcuts import render
 from django.template import loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Persona
-from .forms import PersonaForm
-
+from .models import Cliente
+from .forms import ClienteForm
 from Inversiones_peniche.models import Vehiculo
 from Inversiones_peniche.forms import VehiculoForm
 
@@ -29,17 +28,20 @@ def gentella_html(request):
 
 
 class ClienteCreate(CreateView):
-    form_class = PersonaForm
-    model = Persona
-    template_name = 'app/cliente_form.html'
-    success_url = '/inv/'
-
-
-class AuthorUpdate(UpdateView):
     model = Cliente
+    form_class = ClienteForm
+    template_name = 'app/cliente_form.html'
+    success_url = reverse_lazy('inversiones_peniche:index')
 
 
-class AuthorDelete(DeleteView):
+class ClienteUpdate(UpdateView):
+    model = Cliente
+    form_class = ClienteForm
+    template_name = 'app/cliente_form.html'
+    success_url = reverse_lazy('inversiones_peniche:index')
+
+
+class ClienteDelete(DeleteView):
     model = Cliente
     #success_url = reverse_lazy('cliente-list')
 
@@ -65,3 +67,4 @@ def registro_vehiculo(request):
     return render(request, 'inversiones_peniche/form_vehiculo.html', {
         'form': form,
     })
+

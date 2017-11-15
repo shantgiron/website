@@ -6,19 +6,15 @@ from django.shortcuts import reverse
 # Create your models here.
 
 
-class Telefono(models.Model):
-    numero_telefono = models.IntegerField
-    numero_cel = models.IntegerField
-
-
 class Persona(models.Model):
-    nombre = models.CharField(max_length=100, unique=True)
+    nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100, blank=True)
-    fecha_nacimiento = models.DateTimeField(default=timezone.now())
+    fecha_nacimiento = models.DateTimeField()
     cedula = models.CharField(max_length=20, blank=True)
     correo = models.CharField(max_length=35, blank=True)
     direccion = models.CharField(max_length=50, blank=True)
-    Telefonos = models.ForeignKey(Telefono, on_delete=models.CASCADE, default="123")
+    numero_telefono = models.IntegerField(null=True)
+    numero_cel = models.IntegerField(null=True)
 
 
 class Tipo(models.Model):
@@ -27,11 +23,11 @@ class Tipo(models.Model):
 
 class Vehiculo(models.Model):
     matricula = models.CharField(unique=True, max_length=40)
-    modelo = models.CharField
+    modelo = models.CharField(max_length=30)
     tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE)
-    color = models.CharField
-    condicion = models.CharField
-    valor_mercado = models.IntegerField
+    color = models.CharField(max_length=10)
+    condicion = models.CharField(max_length=10)
+    valor_mercado = models.IntegerField()
 
 
 class Rol(models.Model):
@@ -47,7 +43,15 @@ class Cuota(models.Model):
     vencida = models.BooleanField
 
 
+class Cliente(Persona):
+    vehiculo = models.OneToOneField(Vehiculo, on_delete=models.CASCADE, null=True, blank=True)
+
+    def get_absolute_url(self):
+            return reverse('index', kwargs={'id': self.id})
+
+
 class Prestamo(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,null=True)
     cuotas = models.ForeignKey(Cuota, on_delete=models.CASCADE)
     vehiculo = models.OneToOneField(Vehiculo, on_delete=models.CASCADE)
     operador = models.OneToOneField(Operador, on_delete=models.CASCADE)
@@ -65,14 +69,6 @@ class Prestamo(models.Model):
     fecha_ultimo_pago = models.DateTimeField
     monto_ultimo_pago = models.DateTimeField
     intereses_vencidoes = models.FloatField
-
-
-class Cliente(Persona):
-        vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
-        prestamo = models.ForeignKey(Prestamo, on_delete=models.CASCADE)
-
-        def get_absolute_url(self):
-            return reverse('base_site', kwargs={'pk': self.pk})
 
 
 class Factura (models.Model):

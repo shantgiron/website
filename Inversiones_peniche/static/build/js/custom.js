@@ -963,7 +963,7 @@ function init_autosize() {
 };
 
 /* PARSLEY */
-
+/*
 function init_parsley() {
 
     if (typeof(parsley) === 'undefined') {
@@ -971,15 +971,15 @@ function init_parsley() {
     }
     console.log('init_parsley');
 
-    $ /*.listen*/ ('parsley:field:validate', function() {
+    $ /*.listen ('parsley:field:validate', function() {
         validateFront();
     });
-    $('#demo-form .btn').on('click', function() {
-        $('#demo-form').parsley().validate();
+    $('#clienteForm .btn').on('click', function() {
+        $('#clienteForm').parsley().validate();
         validateFront();
     });
     var validateFront = function() {
-        if (true === $('#demo-form').parsley().isValid()) {
+        if (true === $('#clienteForm').parsley().isValid()) {
             $('.bs-callout-info').removeClass('hidden');
             $('.bs-callout-warning').addClass('hidden');
         } else {
@@ -987,8 +987,9 @@ function init_parsley() {
             $('.bs-callout-warning').removeClass('hidden');
         }
     };
+    */
 
-    $ /*.listen*/ ('parsley:field:validate', function() {
+    $ /*.listen ('parsley:field:validate', function() {
         validateFront();
     });
     $('#demo-form2 .btn').on('click', function() {
@@ -1010,7 +1011,7 @@ function init_parsley() {
     } catch (err) {}
 
 };
-
+*/
 
 /* INPUTS */
 
