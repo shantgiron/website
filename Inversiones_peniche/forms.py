@@ -4,16 +4,7 @@ from django.core.validators import RegexValidator
 from django.forms import ModelForm, TextInput, EmailInput, DateInput
 import datetime
 from django.utils import timezone
-from .models import Cliente
-
-
-class VehiculoForm(forms.Form):
-    matricula = forms.CharField(max_length=40)
-    modelo = forms.CharField
-    # tipo = forms.ForeignKey(Tipo, on_delete=forms.CASCADE)
-    color = forms.CharField
-    condicion = forms.CharField
-    valor_mercado = forms.IntegerField
+from .models import Cliente, Vehiculo, Tipo
 
 
 class ClienteForm(ModelForm):
@@ -53,11 +44,26 @@ class ClienteForm(ModelForm):
 
         }
 
+        def clean_fecha_nacimiento(self):
+            fecha = self.cleaned_data['fecha_nacimiento']
+            if fecha > timezone.now():
+                raise validators.ValidationError(message='Fecha incorrecta: no puede ser una fecha futura')
+            return fecha
 
 
-    def clean_fecha_nacimiento(self):
-        fecha = self.cleaned_data['fecha_nacimiento']
-        if fecha > timezone.now():
-            raise validators.ValidationError(message='Fecha incorrecta: no puede ser una fecha futura')
-        return fecha
+class VehiculoForm(ModelForm):
+
+    class Meta:
+        model = Vehiculo
+        fields = '__all__'
+
+        widgets = {
+            'matricula': TextInput(attrs={'class': "form-control has-feedback-left", 'placeholder': 'Matrícula'}),
+            'modelo': TextInput(attrs={'class': "form-control ", 'placeholder': 'Modelo '}),
+            'year': TextInput(attrs={'class': "form-control has-feedback-left", 'placeholder': 'Año'}),
+            'color': TextInput(attrs={'class': "form-control ", 'placeholder': 'Color'}),
+            'condicion': TextInput(attrs={'class': "form-control has-feedback-left", 'placeholder': 'Condición'}),
+            'valor_mercado': TextInput(attrs={'class': "form-control ", 'placeholder': 'Valor de mercado'}),
+        }
+
 

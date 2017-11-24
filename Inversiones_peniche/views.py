@@ -7,6 +7,7 @@ from .models import Cliente
 from .forms import ClienteForm
 from Inversiones_peniche.models import Vehiculo
 from Inversiones_peniche.forms import VehiculoForm
+from .multiforms import MultiFormsView
 
 
 # Create your views here.
@@ -27,24 +28,48 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 
+class Clienteform(MultiFormsView):
+
+    form_classes = {'cliente': ClienteForm, 'vehiculo': VehiculoForm}
+    template_name = 'app/cliente_form.html'
+    success_url = reverse_lazy('inversiones_peniche:index')
+
+
+"""
 class ClienteCreate(CreateView):
     model = Cliente
     form_class = ClienteForm
     template_name = 'app/cliente_form.html'
     success_url = reverse_lazy('inversiones_peniche:index')
 
-
-class ClienteUpdate(UpdateView):
+    # def get(self, request, *args, **kwargs):
+    #     clienteform = QuestionForm(self.request.GET or None)
+    #     vehiculo_form = AnswerForm(self.request.GET or None)
+    #     context = self.get_context_data(**kwargs)
+    #     context['answer_form'] = answer_form
+    #     context['question_form'] = question_form
+    #     return self.render_to_response(context)
+"""
+class ClienteUpdate(UpdateView, MultiFormsView):
     model = Cliente
     form_class = ClienteForm
     template_name = 'app/cliente_form.html'
     success_url = reverse_lazy('inversiones_peniche:index')
+    context_object_name = 'forms.cliente'
 
 
+"""
 class ClienteDelete(DeleteView):
     model = Cliente
     #success_url = reverse_lazy('cliente-list')
 
+
+class VehiculoCreate(CreateView):
+    model = Vehiculo
+    form_class = VehiculoForm
+    template_name = 'app/cliente_form.html'
+    success_url = reverse_lazy('inversiones_peniche:index')
+"""
 
 def registro_vehiculo(request):
     if request.method == 'POST':
@@ -63,6 +88,7 @@ def registro_vehiculo(request):
             # return HttpResponseRedirect(reverse('inversiones_peniche:'))
     else:
         form = VehiculoForm()
+
 
     return render(request, 'inversiones_peniche/form_vehiculo.html', {
         'form': form,
